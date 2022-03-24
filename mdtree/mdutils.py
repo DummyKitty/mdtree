@@ -154,21 +154,39 @@ def convert_img_to_b64(src, base_dir=None):
         raise ValueError("file does not exists on: %s" % src)
 
     ext = "png"
-    if os.path.splitext(src)[1] in [".jpg", "jpeg"]:
+    if os.path.splitext(src)[1] in [".jpg", ".jpeg"]:
         ext = "jpeg"
 
     with open(src, "rb") as f:
         data = f.read()
 
     img_data = base64.b64encode(data)
-    res = "data:image/%s;base64,%s" % (ext, img_data)
+    res = "data:image/%s;base64,%s" % (ext, img_data.decode())
     return res
 
+def convert_remote_img_to_b64(src):
+    import requests
+    headers = {'Accept-Language': 'zh-CN,zh;q=0.9', 'Cache-Control': 'max-age=0', 'Connection': 'keep-alive', 'Upgrade-Insecure-Requests': '1', 'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/78.0.3904.108 Chrome/78.0.3904.108 Safari/537.36'}
+    try:
+        ext = "png"
+        if any(fmt in src for fmt in [".jpg", ".jpeg"]):
+            ext = "jpeg"
+
+        res = requests.get(src, headers=headers)
+        img_data = base64.b64encode(res.content)
+        res = "data:image/%s;base64,%s" % (ext, img_data.decode())
+        return res
+    except Exception as e:
+        print(e)
+        return src
 
 def handle_image_element(node, base):
     src = node.attrib.get('src')
-    if src and not RE_REMOTEIMG.match(src):
-        node.set("src", convert_img_to_b64(src, base))
+    if src:
+        if not RE_REMOTEIMG.match(src):
+            node.set("src", convert_img_to_b64(src, base))
+        else:
+            node.set("src", convert_remote_img_to_b64(src))
     return node
 
 

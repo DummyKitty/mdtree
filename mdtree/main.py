@@ -141,7 +141,7 @@ class MdTree(object):
         :param str tpath: path of target file
         :return:
         """
-        with open(tpath, "w") as f:
+        with open(tpath, "wb") as f:
             f.write(self._html)
         return tpath
 
