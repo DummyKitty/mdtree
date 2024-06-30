@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # encoding: utf-8
 from setuptools import setup
-__version__ = "0.7"
-__desc__ = "Convert markdown to html with TOC(table of contents) https://github.com/menduo/mdtree"
+__version__ = "0.8"
+__desc__ = "Convert markdown to html with TOC(table of contents) https://github.com/DummyKitty/mdtree"
 
-repo_url = "https://github.com/menduo/mdtree"
+repo_url = "https://github.com/DummyKitty/mdtree"
 packages = ["mdtree"]
 
 setup(
@@ -48,5 +48,5 @@ setup(
         "Topic :: Text Processing :: Filters",
         "Topic :: Text Processing :: Markup :: HTML",
     ],
-    install_requires=["markdown>=2.6.8,<3.0", "pygments"],
+    install_requires=["markdown>=3.5", "pygments"],
 )

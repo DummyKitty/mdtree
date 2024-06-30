@@ -5,7 +5,7 @@ mdtree, convert markdown to html with TOC(table of contents) tree. https://githu
 """
 import sys, os
 import markdown
-from mdtree.mdutils import PY3, clean_list, parse_title, to_bool, to_unicode, utf8, ImageCheckPattern
+from mdtree.mdutils import PY3, clean_list, parse_title, to_bool, to_unicode, utf8, ImageCheckInlineProcessor
 from mdtree.parser import gen_html, prepare_static_files, parse_static_files, adjust_ext_list
 
 _d_static_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
@@ -24,7 +24,7 @@ class MdTree(object):
         """
         self.ext_list = [
             "markdown.extensions.meta",
-            "markdown.extensions.headerid",
+            "toc",
             "markdown.extensions.tables",
             "markdown.extensions.toc",
             "markdown.extensions.fenced_code",
@@ -81,7 +81,7 @@ class MdTree(object):
             if not self.base_dir:
                 raise ValueError(
                     "base dir is required while convert from text and enable convert local image to base64")
-            md2.inlinePatterns["image_link"] = ImageCheckPattern(self.base_dir, md2)
+            md2.inlinePatterns.register(ImageCheckInlineProcessor(self.base_dir, md2),"image_link", 175)
         return md2, md_meta
 
     def convert(self, source):

@@ -4,7 +4,8 @@ import sys
 import re
 import os
 import base64
-from markdown.inlinepatterns import ImagePattern, IMAGE_LINK_RE
+# from markdown.inlinepatterns import ImagePattern, IMAGE_LINK_RE
+from markdown.inlinepatterns import ImageInlineProcessor, IMAGE_LINK_RE
 
 RE_REMOTEIMG = re.compile('^(http|https):.+')
 
@@ -181,22 +182,22 @@ def convert_remote_img_to_b64(src):
         return src
 
 def handle_image_element(node, base):
-    src = node.attrib.get('src')
+    src = node[0].attrib.get('src')
     if src:
         if not RE_REMOTEIMG.match(src):
-            node.set("src", convert_img_to_b64(src, base))
+            node[0].set("src", convert_img_to_b64(src, base))
         else:
-            node.set("src", convert_remote_img_to_b64(src))
+            node[0].set("src", convert_remote_img_to_b64(src))
     return node
 
 
-class ImageCheckPattern(ImagePattern):
+class ImageCheckInlineProcessor(ImageInlineProcessor):
     def __init__(self, base, md_inst=None, pattern=IMAGE_LINK_RE):
-        super(ImageCheckPattern, self).__init__(pattern, md_inst)
+        super(ImageCheckInlineProcessor, self).__init__(pattern, md_inst)
         self.__base_dir = base
 
-    def handleMatch(self, m):
-        node = ImagePattern.handleMatch(self, m)
+    def handleMatch(self, m ,data):
+        node = ImageInlineProcessor.handleMatch(self, m, data)
         node = handle_image_element(node, self.__base_dir)
         return node
 

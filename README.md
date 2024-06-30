@@ -9,6 +9,8 @@ Convert markdown to html with TOC(table of contents) tree. [https://github.com/m
 
 # Install
 
+![https://github.com/menduo/mdtree](https://raw.githubusercontent.com/menduo/mdtree/master/assets/screenshots/mdtree-screenshot.png)
+
 ```bash
 pip install -U mdtree
 ```
@@ -96,3 +98,6 @@ The name of the extensioins should be the same as [https://pythonhosted.org/Mark
 
 # Credits
 - [Markdown](https://github.com/waylan/Python-Markdown) - A Python implementation of John Gruber’s Markdown
+
+
+# Upgrade markdown to 3.6
